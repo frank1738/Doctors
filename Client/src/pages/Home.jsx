@@ -12,6 +12,9 @@ import avatorIcon from '../assets/images/avatar-icon.png';
 import { Link } from 'react-router-dom';
 import { BsArrowRight } from 'react-icons/bs';
 import ServiceList from '../components/Services/ServiceList';
+import faqImage from '../assets/images/faq-img.png';
+import FaqList from '../components/Faq/FaqList';
+import Testimonial from '../components/Testimonials/Testimonial';
 
 const Home = () => {
   return (
@@ -223,6 +226,35 @@ const Home = () => {
             </p>
           </div>
           <DoctorList />
+        </div>
+      </section>
+
+      <section className="mt-[70px] sm:px-[50px]">
+        <div className="container">
+          <div className="flex justify-between gap-[50px] lg:gap-0">
+            <div className="w-1/2 hidden md:block">
+              <img src={faqImage} />
+            </div>
+            <div className="w-full md:w-1/2">
+              <h2 className="heading">Most questions asked by our patients</h2>
+              <FaqList />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="">
+        <div className="container">
+          <div className="xl:w-[470px] mx-auto">
+            <h2 className="heading text-center mt-[70px]">
+              What our Patients Say
+            </h2>
+            <p className="text_para text-center ">
+              But I must explain to you how all this mistaken idea of denouncing
+              pleasure and praising pain was born.
+            </p>
+          </div>
+          <Testimonial />
         </div>
       </section>
     </>
