@@ -10,6 +10,8 @@ import LocalStrategy from 'passport-local';
 import User from './models/userModel.js';
 import bcrypt from 'bcrypt';
 import Doctor from './models/doctorModel.js';
+import userRouter from './routes/user.routes.js';
+import doctorRouter from './routes/doctorRoute.js';
 
 const app = express();
 
@@ -39,6 +41,8 @@ app.use(passport.session());
 
 // routes
 app.use('/api/auth', authRoute);
+app.use('/api/users', userRouter);
+app.use('/api/doctors', doctorRouter);
 
 //passport
 
@@ -49,7 +53,19 @@ passport.use(
       try {
         // Find a user with the provided username
         const { role } = req.body;
-        const UserModel = role === 'patient' ? User : Doctor;
+        let UserModel;
+
+        if (!role) {
+          return done(null, false, { message: 'The role is missing.' });
+        }
+
+        if (role === 'patient' || role === 'admin') {
+          UserModel = User;
+        } else if (role === 'doctor') {
+          UserModel = Doctor;
+        } else {
+          return done(null, false, { message: 'The role does not exists' });
+        }
         const user = await UserModel.findOne({ username });
 
         if (!user) {
@@ -80,7 +96,14 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (serializedUser, done) => {
   try {
     const { id, role } = serializedUser;
-    const UserModel = role === 'patient' ? User : Doctor;
+    let UserModel;
+    if (role === 'patient' || role === 'admin') {
+      UserModel = User;
+    } else if (role === 'doctor') {
+      UserModel = Doctor;
+    } else {
+      return done(null, false, { message: 'The role does not exists' });
+    }
     const user = await UserModel.findById(id);
     done(null, user);
   } catch (error) {

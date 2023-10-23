@@ -7,7 +7,12 @@ export const registerUser = async (req, res) => {
   try {
     const { name, username, email, password, role, photo, gender } = req.body;
 
-    const UserModel = role === 'patient' ? User : Doctor;
+    let UserModel;
+    if (role === 'patient' || role === 'admin') {
+      UserModel = User;
+    } else if (role === 'doctor') {
+      UserModel = Doctor;
+    }
     const existingUser = await UserModel.findOne({ username });
 
     if (existingUser) {
@@ -29,9 +34,18 @@ export const registerUser = async (req, res) => {
     });
 
     const savedUser = await newUser.save();
+    const updatedUserWithoutExtraFields = {
+      name: savedUser.name,
+      username: savedUser.username,
+      email: savedUser.email,
+      role: savedUser.role,
+      photo: savedUser.photo,
+      gender: savedUser.gender,
+    };
+
     res.status(201).json({
       message: 'User created successifully',
-      savedUser,
+      user: updatedUserWithoutExtraFields,
     });
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
@@ -55,7 +69,7 @@ export const loginUser = (req, res, next) => {
           return res.status(500).json({ msg: loginErr.message });
         }
         // User is authenticated and logged in successfully
-        return res.status(200).json({ msg: 'Login successful', user });
+        return res.status(200).json({ msg: 'Login successful' });
       });
     })(req, res, next);
   } catch (error) {

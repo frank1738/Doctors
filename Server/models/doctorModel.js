@@ -47,6 +47,9 @@ const DoctorSchema = new mongoose.Schema(
       type: String,
       maxLength: 50,
     },
+    role: {
+      type: String,
+    },
     about: {
       type: String,
     },
