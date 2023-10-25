@@ -12,6 +12,7 @@ import bcrypt from 'bcrypt';
 import Doctor from './models/doctorModel.js';
 import userRouter from './routes/user.routes.js';
 import doctorRouter from './routes/doctorRoute.js';
+import reviewRouter from './routes/reviewRoute.js';
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(passport.session());
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRouter);
 app.use('/api/doctors', doctorRouter);
+app.use('/api/reviews', reviewRouter);
 
 //passport
 

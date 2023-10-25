@@ -52,9 +52,9 @@ export const deleteDoctor = async (req, res) => {
 export const getSingleDoctor = async (req, res) => {
   const { id } = req.params;
   try {
-    const doctor = await Doctor.findById(id).select(
-      '-password -email -createdAt -updatedAt -__v'
-    );
+    const doctor = await Doctor.findById(id)
+      .populate('reviews')
+      .select('-password -email -createdAt -updatedAt -__v');
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor not found' });
     }

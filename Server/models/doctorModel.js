@@ -59,7 +59,8 @@ const DoctorSchema = new mongoose.Schema(
     reviews: {
       type: [{ type: mongoose.Types.ObjectId, ref: 'Review' }],
     },
-    rating: {
+
+    averageRating: {
       type: Number,
       default: 0,
     },
